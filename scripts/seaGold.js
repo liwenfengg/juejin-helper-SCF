@@ -420,7 +420,7 @@ async function run(args) {
   }
 
   const message = messageList.join(`\n${"-".repeat(15)}\n`);
-  pushMessage({
+  return await pushMessage({
     subject: "海底掘金游戏",
     text: message
   });
