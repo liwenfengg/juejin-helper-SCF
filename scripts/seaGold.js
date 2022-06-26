@@ -406,7 +406,7 @@ ${this.history.length ? `\n游戏记录\n${gameLives}` : ""}
 
 async function run(args) {
   const cookies = utils.getUsersCookie(env);
-  let message = "";
+  const messageList = [];
   for (let cookie of cookies) {
     const seaGold = new SeaGold(cookie);
 
@@ -416,9 +416,11 @@ async function run(args) {
     const content = seaGold.toString();
     console.log(content);
 
-    message += "\n----------\n" + content + "\n----------\n";
+    messageList.push(content);
   }
-  await pushMessage({
+
+  const message = messageList.join(`\n${"-".repeat(15)}\n`);
+  pushMessage({
     subject: "海底掘金游戏",
     text: message
   });
