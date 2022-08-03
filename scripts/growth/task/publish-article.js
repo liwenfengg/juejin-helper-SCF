@@ -1,6 +1,6 @@
 const {getCookie} = require("../cookie");
 const JuejinHttp = require("../api");
-const {getBrowser} = require("../utils");
+const {addCookies, getBrowser} = require("../utils");
 
 const mockArticleData = {
   title: "如果有一天不做前端了，我会做什么？",
@@ -19,10 +19,11 @@ const articlePublish = async (task) => {
   const defaultArticles = Array(times).fill(mockArticleData);
   const browser = await getBrowser();
   const page = await browser.newPage();
+  await addCookies(cookie, page, ".juejin.cn");
   try {
     // 爬取一篇文章发布 并删除
     await page.goto(`https://segmentfault.com/blogs/newest`);
-    await page.waitForTimeout(10000);
+    await page.waitForTimeout(5000);
     await page.waitForSelector(".content-list-wrap");
     const host = `https://segmentfault.com`;
     links = await page.$$eval(".content-list-wrap .list-group-item", (els) => {
@@ -40,7 +41,7 @@ const articlePublish = async (task) => {
       for (let i = 0; i < times; i++) {
         let link = host + (links[i] || links[0]);
         await page.goto(link);
-        await page.waitForTimeout(5000);
+        await page.waitForTimeout(2500);
         await page.waitForSelector("h1.h2");
         const title = await page.$$eval("h1.h2", (els) => {
           return els[0].innerText;
@@ -100,6 +101,7 @@ const articlePublish = async (task) => {
     }
   }
   await page.close();
+  await browser.close();
   console.log(`发布文章 done`);
 };
 

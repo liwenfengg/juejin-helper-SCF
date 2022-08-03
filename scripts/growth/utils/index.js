@@ -1,4 +1,5 @@
 const axios = require("axios");
+const puppeteer = require("puppeteer");
 
 module.exports = {
   deepMerge(ops1, ops2) {
@@ -43,5 +44,37 @@ module.exports = {
       }
       return r(defaultWords);
     });
+  },
+  async addCookies(cookies_str, page, domain) {
+    let cookies = cookies_str.split(";").map((pair) => {
+      let name = pair.trim().slice(0, pair.trim().indexOf("="));
+      let value = pair.trim().slice(pair.trim().indexOf("=") + 1);
+      return {name, value, domain};
+    });
+    await Promise.all(
+      cookies.map((pair) => {
+        return page.setCookie(pair);
+      })
+    );
+  },
+  async getBrowser(options) {
+    try {
+      const browser = await puppeteer.launch(
+        Object.assign({}, options, {
+          headless: true,
+          ignoreDefaultArgs: ["--disable-extensions"],
+          args: [
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--use-gl=egl",
+            "--disable-web-security",
+            "--disable-features=IsolateOrigins,site-per-process"
+          ]
+        })
+      );
+      return browser;
+    } catch (error) {
+      console.log(error.message || "puppeteer启动失败");
+    }
   }
 };
