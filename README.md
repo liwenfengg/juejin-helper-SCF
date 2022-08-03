@@ -1,16 +1,26 @@
-## 腾讯云函数部署
+# *juejin-helper* 腾讯云函数部署
 
-## 部署相关
+## 🚀 主要功能
 
-### 📌 步骤
+项目主体部分(签到、抽奖、BUG、海底掘金)来自[iDerekLi/juejin-helper](https://github.com/iDerekLi/juejin-helper)
 
-1. 创建函数:
+每日成长任务部分来自[chinjiaqing/juejin-helper](https://github.com/chinjiaqing/juejin-helper)
+
+**每日成长任务只支持执行env中第一个COOKIE值代表的账号**
+
+**发布文章任务会出现权限认证问题 暂未支持**
+
+## 🔰 使用步骤
+
+### 🎯 项目部署
+
+#### 1. 创建函数:
 
 从头开始 / 事件函数 / 环境`Nodejs16` / 内存`64MB` / 勾选异步执行 / 执行超时时间`86400` / 参数填入环境变量
 
-**其余内容保持默认** 可根据实际情况配置`触发器`定时执行
+可根据实际情况配置`触发器`定时执行, **其余内容保持默认**
 
-2. 克隆代码:
+#### 2. 克隆代码:
 
 使用腾讯云函数的 在线编辑器 点击 `终端/新终端` 并按步骤键入以下代码
 
@@ -18,7 +28,7 @@
   git clone https://github.com/ZiuChen/juejin-helper.git
 ```
 
-3. 安装依赖:
+#### 3. 安装依赖:
 
 将 `juejin-helper` 重命名为 `src` 后进入 `src` 目录安装依赖
 
@@ -28,11 +38,7 @@
 
 **完整执行**上述步骤后, 点击"部署", 部署成功后点击"测试", 查看日志输出即可, 如配置了触发器, 则将每天定时触发。
 
-### 📌 环境变量
-
-见[iDerekLi/juejin-helper](https://github.com/iDerekLi/juejin-helper)
-
-### 📌 更新函数
+### 📦 更新函数
 
 在 **根目录** 下执行:
 
