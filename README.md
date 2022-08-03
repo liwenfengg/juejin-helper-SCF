@@ -6,7 +6,7 @@
 
 每日成长任务部分来自[chinjiaqing/juejin-helper](https://github.com/chinjiaqing/juejin-helper)
 
-**每日成长任务只支持执行env中第一个COOKIE值代表的账号**
+**每日成长任务只执行env中第一个COOKIE值代表的账号**
 
 ## 🔰 使用步骤
 

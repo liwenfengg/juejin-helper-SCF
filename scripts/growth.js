@@ -24,7 +24,7 @@ const growth = async () => {
       const message = `成长任务已完成: ${today_jscore}`;
       console.log(message);
       return await pushMessage({
-        subject: "掘金每日签到",
+        subject: "掘金成长任务",
         text: message
       });
     }
