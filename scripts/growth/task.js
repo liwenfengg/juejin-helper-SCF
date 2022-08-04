@@ -5,7 +5,7 @@ const {
   commentArticle,
   commentPin,
   followAuthor,
-  publishArticle,
+  // publishArticle,
   publishPin,
   readArticle
 } = require("./task/index");
@@ -37,7 +37,7 @@ const handleTask = async (task) => {
     await publishPin(task);
   }
   if (id == 5) {
-    await publishArticle(task);
+    // await publishArticle(task);
   }
 };
 
