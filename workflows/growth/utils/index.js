@@ -1,4 +1,5 @@
 const axios = require("axios");
+const hitokotoURL = 'https://v1.hitokoto.cn/?c=e'
 
 module.exports = {
   deepMerge(ops1, ops2) {
@@ -17,7 +18,7 @@ module.exports = {
   async getRandomSentence() {
     return new Promise(async (r) => {
       const defaultWords = `最近大环境好像真的很差哎，以前简历找我的都是一大堆，现在寥寥无几`;
-      const res = await axios.get("https://v1.jinrishici.com/all.json").catch((error) => {
+      const res = await axios.get(hitokotoURL).catch((error) => {
         return r(defaultWords);
       });
       if (res.status == 200) {
@@ -32,7 +33,7 @@ module.exports = {
   async getHitokotoWords() {
     return new Promise(async (r) => {
       const defaultWords = `最近大环境好像真的很差哎，以前简历找我的都是一大堆，现在寥寥无几`;
-      const res = await axios.get("https://v1.hitokoto.cn/").catch((error) => {
+      const res = await axios.get(hitokotoURL).catch((error) => {
         return r(defaultWords);
       });
       if (res.status == 200) {
