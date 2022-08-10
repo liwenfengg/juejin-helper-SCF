@@ -1,6 +1,5 @@
 const {getCookie} = require("../cookie");
 const JuejinHttp = require("../api");
-// const { getRandomSentence } = require('../../utils/jinrishici')
 const {getHitokotoWords} = require("../utils");
 // 发布沸点
 const pinPublish = async (task) => {
