@@ -1,108 +1,96 @@
-const {getCookie} = require("../cookie");
+const { getCookie } = require("../cookie");
 const JuejinHttp = require("../api");
-const {addCookies, getBrowser} = require("../utils");
 
-const mockArticleData = {
-  title: "如果有一天不做前端了，我会做什么？",
-  brief_content:
-    "毕业后就投身于前端行业，这期间做过业务，做过基建，大前端技术体系下的各个子方向基本都实践过。回过头来看，与刚进入前端行业时相比，对前端行业的认识更清晰...",
-  content: `毕业后就投身于前端行业，这期间做过业务，做过基建，大前端技术体系下的各个子方向基本都实践过。回过头来看，与刚进入前端行业时相比，对前端行业的认识更清晰了，但也发现困惑更多了，追求的东西好像变了，欠缺的东西变多了。`
-};
+const axios = require("axios");
+const { JSDOM } = require("jsdom");
 
-const articlePublish = async (task) => {
+const publishArticle = async () => {
+  const baseURL = "https://segmentfault.com";
   const cookie = await getCookie();
   const API = new JuejinHttp(cookie);
-  const times = task.limit - task.done; //需要执行的次数
-  console.log(`需要发布${times}篇文章`);
-  let links = [];
-  let articles = [];
-  const defaultArticles = Array(times).fill(mockArticleData);
-  const browser = await getBrowser();
-  const page = await browser.newPage();
-  await addCookies(cookie, page, ".juejin.cn");
-  try {
-    // 爬取一篇文章发布 并删除
-    await page.goto(`https://segmentfault.com/blogs/newest`);
-    await page.waitForTimeout(5000);
-    await page.waitForSelector(".content-list-wrap");
-    const host = `https://segmentfault.com`;
-    links = await page.$$eval(".content-list-wrap .list-group-item", (els) => {
-      return els.map((el) => {
-        let $a = el.querySelector("h5 a.title");
-        if ($a) {
-          return $a.getAttribute("href");
-        }
-      });
-    });
-    links = links.filter((v) => !!v);
-    if (!links.length) {
-      console.log(`未抓取到合适的文章`);
-    } else {
-      for (let i = 0; i < times; i++) {
-        let link = host + (links[i] || links[0]);
-        await page.goto(link);
-        await page.waitForTimeout(2500);
-        await page.waitForSelector("h1.h2");
-        const title = await page.$$eval("h1.h2", (els) => {
-          return els[0].innerText;
-        });
-        let content = await page.$$eval("article.article-content", (els) => {
-          return els[0].innerText;
-        });
-        if (content.length == 0) {
-          content += title;
-        }
-        content += ` \n> 来源： [${title}](${link}) \n`;
-        let brief_content = content.substr(0, 50) + "...";
-        while (brief_content.length < 50) {
-          brief_content += brief_content;
-        }
-        articles.push({
-          title,
-          content,
-          brief_content
-        });
-      }
-    }
-  } catch (err) {
-    console.log(`爬取文章失败，将发布默认文章`);
-    console.log(err.message);
-  }
 
-  articles = articles.concat(defaultArticles);
-  for (let i = 0; i < times; i++) {
-    let currentArticle = articles[i];
-    let {title, brief_content, content} = currentArticle;
-    const articleInfo = await API.createArticle(title).catch((err) => {
-      console.log(`发布失败`);
-      console.log(err);
-    });
-    const article_id = articleInfo["id"];
-    await API.updateArticle(article_id, title, brief_content, content).catch((err) => {
-      console.log(`发布失败2`);
-      console.log(err);
-    });
-    // 去草稿箱点击模拟发布文章
-    await page.goto(`https://juejin.cn/editor/drafts/${article_id}`);
-    await page.waitForTimeout(2000);
-    await page.click(".publish-popup");
-    await page.waitForTimeout(2000);
-    await page.click(".panel .footer button:last-of-type");
-    // 监听发布成功
-    const publishRes = await page.waitForResponse((response) =>
-      response.url().includes(`https://api.juejin.cn/content_api/v1/article/publish`)
-    );
-    const publishResJson = await publishRes.json();
-    if (publishResJson.err_no == 0) {
-      const data = publishResJson.data;
-      // 删除刚刚发布的文章
-      // ids.push(data.article_id)
-      // await API.articleRemove(data.article_id || '')
+  const parseToDOM = string => {
+    // ALERT: Only basic dom api is enabled.
+    const dom = new JSDOM(string);
+    return dom.window.document;
+  };
+
+  const parseToLinkList = DOM => {
+    const listDOM = DOM.querySelectorAll(".list-group-item");
+    const linkList = [];
+    for (const article of listDOM) {
+      const item = article?.querySelector("h5 a");
+      const title = item?.innerHTML;
+      const url = item?.getAttribute("href");
+      linkList.push({
+        title,
+        url
+      });
     }
-  }
-  await page.close();
-  await browser.close();
-  console.log(`发布文章 done`);
+    return linkList;
+  };
+
+  const fetchArticleDOM = link => {
+    return axios
+      .get(baseURL + link)
+      .then(res => res.data)
+      .then(data => parseToDOM(data));
+  };
+
+  const parseToContent = DOM => {
+    const content = DOM.querySelector("article").innerHTML;
+    const pureContent = DOM.querySelector("article").textContent;
+    const brief_content = pureContent.substr(0, 50) + "...";
+    return {
+      content,
+      brief_content
+    };
+  };
+
+  const fetchArticleContent = async linkList => {
+    const slicedList = linkList.slice(0, 2);
+    const articleList = [];
+    for (const { title, url } of slicedList) {
+      const DOM = await fetchArticleDOM(url);
+      const { content, brief_content } = parseToContent(DOM);
+      articleList.push({
+        title,
+        content,
+        brief_content
+      });
+    }
+    return articleList;
+  };
+
+  const publishArticle = async articleList => {
+    for (const { title, content, brief_content } of articleList) {
+      const articleInfo = await API.createArticle(title).catch(err => {
+        console.log(`创建文章失败`);
+        console.log(err);
+      });
+      const article_id = articleInfo["id"];
+      console.log(articleInfo);
+      await API.updateArticle(article_id, title, brief_content, content).catch(err => {
+        console.log(`更新文章内容失败`);
+        console.log(err);
+      });
+      await API.publishArticle(article_id).catch(err => {
+        console.log(`发布文章失败`);
+        console.log(err);
+      });
+    }
+  };
+
+  await axios
+    .get(baseURL + "/blogs")
+    .then(res => res.data)
+    .then(data => parseToDOM(data))
+    .then(DOM => parseToLinkList(DOM))
+    .then(linkList => fetchArticleContent(linkList))
+    .then(articleList => publishArticle(articleList))
+    .catch(err => {
+      console.log(err);
+    });
 };
 
-module.exports = articlePublish;
+module.exports = publishArticle;

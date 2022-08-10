@@ -318,6 +318,20 @@ class JuejinHttp {
     });
   }
 
+  // 发布文章
+  // 文章id
+  publishArticle(id) {
+    return this.request({
+      method: "POST",
+      url: "https://api.juejin.cn/content_api/v1/article/publish",
+      data: {
+        column_ids: [],
+        draft_id: id,
+        sync_to_org: false
+      }
+    });
+  }
+
   // 成长任务埋点
   // 目前用于 文章阅读
   growthPointReport(item_id, task_id = 13) {
