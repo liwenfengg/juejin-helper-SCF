@@ -1,5 +1,7 @@
 const axios = require("axios");
-const hitokotoURL = "https://v1.hitokoto.cn/?c=e";
+const env = require("../utils/env");
+const defaultWords = "呃呃";
+const hitokotoURL = env.WORDS_API ? "https://v1.hitokoto.cn/" + env.WORDS_API : "https://v1.hitokoto.cn/?c=e";
 
 const deepMerge = (ops1, ops2) => {
   let ops = Object.assign({}, ops1, ops2);
@@ -68,14 +70,13 @@ const getRandomEmoji = async () => {
 
 const getHitokotoWords = async () => {
   return new Promise(async r => {
-    const defaultWords = "呃呃";
     const res = await axios.get(hitokotoURL).catch(error => {
       return r(defaultWords);
     });
     if (res.status == 200) {
       const data = res.data;
       if (data && data.hitokoto) {
-        const emj = await getRandomEmoji();
+        const emj = env.APPEND_EMOJI ? await getRandomEmoji() : "";
         const word = (data.hitokoto += emj);
         return r(word);
       }

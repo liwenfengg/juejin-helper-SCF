@@ -1,8 +1,9 @@
 // 沸点评论
-const {getCookie} = require("../cookie");
+const { getCookie } = require("../cookie");
 const JuejinHttp = require("../api");
-const {getHitokotoWords} = require("../utils");
-const pinComment = async (task) => {
+const { getRandomEmoji, getHitokotoWords } = require("../utils");
+const env = require("../utils/env");
+const pinComment = async task => {
   const cookie = await getCookie();
   const API = new JuejinHttp(cookie);
   const pins = await API.getRecommendPins();
@@ -15,8 +16,8 @@ const pinComment = async (task) => {
   for (let i = 0; i < times; i++) {
     const article = pins[i] || pins[0];
     // 随机评论一句古诗
-    const {msg_id, content} = article["msg_Info"];
-    const words = await getHitokotoWords();
+    const { msg_id, content } = article["msg_Info"];
+    const words = env.ONLY_EMOJI ? getRandomEmoji() : await getHitokotoWords();
     const comment = await API.articleCommentAdd(msg_id, words, 4);
     // 删除评论
     // await API.articleCommentRemove(comment['comment_id'])
