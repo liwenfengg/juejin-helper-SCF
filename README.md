@@ -8,7 +8,7 @@
 
 **每日成长任务只执行env中第一个COOKIE值代表的账号**
 
-### 环境变量
+### 💡 环境变量
 
 基础环境变量参考[iDerekLi/juejin-helper](https://github.com/iDerekLi/juejin-helper)
 
@@ -58,4 +58,4 @@
 
 ## 开发相关
 
-Branch `main` <-- Branch `tx-SCF`
+Branch `main` <-- Branch `dev`
