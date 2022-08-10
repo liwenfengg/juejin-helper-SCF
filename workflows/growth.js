@@ -1,13 +1,13 @@
 const JuejinHttp = require("./growth/api");
-const {getCookie} = require("./growth/cookie");
-const {handleTask} = require("./growth/task");
+const { getCookie } = require("./growth/cookie");
+const { handleTask } = require("./growth/task");
 const pushMessage = require("./utils/pushMessage");
 
 const growth = async () => {
   try {
     const cookie = await getCookie();
     const API = new JuejinHttp(cookie);
-    const {growth_tasks = {}} = await API.getTaskList();
+    const { growth_tasks = {} } = await API.getTaskList();
     const data = Object.values(growth_tasks);
     let taskHasDone = 0;
     for (let items of data) {
@@ -19,7 +19,7 @@ const growth = async () => {
         }
       }
     }
-    const {today_jscore} = await API.getTaskList();
+    const { today_jscore } = await API.getTaskList();
     if (taskHasDone > 0) {
       const message = `成长任务已完成: ${today_jscore}`;
       console.log(message);

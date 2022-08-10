@@ -1,4 +1,4 @@
-const fetch = require("node-fetch");
+const axios = require("axios");
 const env = require("./env");
 const userConfig = {
   url: "http://www.pushplus.plus/send",
@@ -21,21 +21,21 @@ async function main({ subject, text, html }) {
     callbackUrl: "",
     timestamp: ""
   })
-    .then((res) => res.json())
-    .then((json) => {
+    .then(res => res.json())
+    .then(json => {
       console.log(`PushPlus推送结果: ` + json.msg);
       return json;
     });
 }
 
 async function postMessage(message) {
-  return await fetch(userConfig.url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(message)
-  }).catch((err) => console.log(err));
+  return await axios
+    .post(userConfig.url, message, {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .catch(err => console.log(err));
 }
 
 module.exports = main;

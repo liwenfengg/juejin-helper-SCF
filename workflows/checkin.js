@@ -84,8 +84,7 @@ class CheckIn {
     let freeCount = this.freeCount;
     while (freeCount > 0) {
       const result = await growth.drawLottery();
-      this.drawLotteryHistory[result.lottery_id] =
-        (this.drawLotteryHistory[result.lottery_id] || 0) + 1;
+      this.drawLotteryHistory[result.lottery_id] = (this.drawLotteryHistory[result.lottery_id] || 0) + 1;
       this.luckyValue = result.total_lucky_value;
       freeCount--;
       this.lotteryCount++;
@@ -94,7 +93,7 @@ class CheckIn {
 
     this.sumPoint = await growth.getCurrentPoint();
 
-    const getProbabilityOfWinning = (sumPoint) => {
+    const getProbabilityOfWinning = sumPoint => {
       const pointCost = this.pointCost;
       const luckyValueCost = 10;
       const totalDrawsNumber = sumPoint / pointCost;
@@ -169,7 +168,7 @@ class CheckIn {
   toString() {
     const drawLotteryHistory = Object.entries(this.drawLotteryHistory)
       .map(([lottery_id, count]) => {
-        const lotteryItem = this.lottery.find((item) => item.lottery_id === lottery_id);
+        const lotteryItem = this.lottery.find(item => item.lottery_id === lottery_id);
         if (lotteryItem) {
           return `${lotteryItem.lottery_name}: ${count}`;
         }
@@ -179,20 +178,8 @@ class CheckIn {
 
     return `
 掘友: ${this.username}
-${
-  this.todayStatus === 1
-    ? `签到成功 +${this.incrPoint} 矿石`
-    : this.todayStatus === 2
-    ? "今日已完成签到"
-    : "签到失败"
-}
-${
-  this.dipStatus === 1
-    ? `沾喜气 +${this.dipValue} 幸运值`
-    : this.dipStatus === 2
-    ? "今日已经沾过喜气"
-    : "沾喜气失败"
-}
+${this.todayStatus === 1 ? `签到成功 +${this.incrPoint} 矿石` : this.todayStatus === 2 ? "今日已完成签到" : "签到失败"}
+${this.dipStatus === 1 ? `沾喜气 +${this.dipValue} 幸运值` : this.dipStatus === 2 ? "今日已经沾过喜气" : "沾喜气失败"}
 ${
   this.bugStatus === 1
     ? this.collectBugCount > 0

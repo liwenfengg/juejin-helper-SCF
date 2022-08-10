@@ -1,8 +1,8 @@
-const checkin = require("./scripts/checkin");
-const seaGold = require("./scripts/seaGold");
-const growth = require("./scripts/growth");
+const checkin = require("./workflows/checkin");
+const seaGold = require("./workflows/seaGold");
+const growth = require("./workflows/growth");
 
-exports.main_handler = async () => {
+module.exports = main_handler = async () => {
   await checkin();
   await seaGold();
   await growth();
