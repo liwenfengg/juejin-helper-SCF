@@ -1,7 +1,7 @@
 const axios = require("axios");
 const env = require("../utils/env");
 const defaultWords = "呃呃";
-const hitokotoURL = env.WORDS_API ? "https://v1.hitokoto.cn/" + env.WORDS_API : "https://v1.hitokoto.cn/?c=e";
+const hitokotoURL = "https://v1.hitokoto.cn/" + env.WORDS_API;
 
 const deepMerge = (ops1, ops2) => {
   let ops = Object.assign({}, ops1, ops2);
