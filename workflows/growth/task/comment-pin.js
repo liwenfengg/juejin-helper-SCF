@@ -17,7 +17,7 @@ const pinComment = async task => {
     const article = pins[i] || pins[0];
     // 随机评论一句古诗
     const { msg_id, content } = article["msg_Info"];
-    const words = env.ONLY_EMOJI ? getRandomEmoji() : await getHitokotoWords();
+    const words = env.ONLY_EMOJI ? await getRandomEmoji() : await getHitokotoWords();
     const comment = await API.articleCommentAdd(msg_id, words, 4);
     // 删除评论
     // await API.articleCommentRemove(comment['comment_id'])
