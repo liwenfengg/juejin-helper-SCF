@@ -25,7 +25,7 @@
 使用腾讯云函数的 在线编辑器 点击 `终端/新终端` 并按步骤键入以下代码
 
 ```shell
-  git clone https://github.com/ZiuChen/juejin-helper.git
+  git clone https://github.com/ZiuChen/juejin-helper-SCF.git
 ```
 
 #### 3. 安装依赖:
@@ -33,7 +33,7 @@
 将 `juejin-helper` 重命名为 `src` 后, 进入 `src` 目录安装依赖
 
 ```shell
-  mv juejin-helper src && cd src/ && yarn
+  mv juejin-helper-SCF src && cd src/ && yarn
 ```
 
 **完整执行**上述步骤后, 点击"部署", 部署成功后点击"测试", 查看日志输出即可, 如配置了触发器, 则将每天定时触发。
