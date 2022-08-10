@@ -42,9 +42,9 @@ const publishArticle = async () => {
   };
 
   const parseToContent = DOM => {
-    const content = DOM.querySelector("article").innerHTML;
-    const pureContent = DOM.querySelector("article").textContent;
-    const brief_content = pureContent.substr(0, 50) + "...";
+    // const content = DOM.querySelector("article").innerHTML;
+    const content = DOM.querySelector("article").textContent;
+    const brief_content = content.substr(0, 50) + "...";
     return {
       content,
       brief_content
