@@ -34,7 +34,11 @@ const publishArticle = async () => {
     return axios
       .get(baseURL + link)
       .then(res => res.data)
-      .then(data => parseToDOM(data));
+      .then(data => parseToDOM(data))
+      .catch(err => {
+        console.log("获取文章内容失败");
+        console.log(err);
+      });
   };
 
   const parseToContent = DOM => {
@@ -69,7 +73,6 @@ const publishArticle = async () => {
         console.log(err);
       });
       const article_id = articleInfo["id"];
-      console.log(articleInfo);
       await API.updateArticle(article_id, title, brief_content, content).catch(err => {
         console.log(`更新文章内容失败`);
         console.log(err);
@@ -89,6 +92,7 @@ const publishArticle = async () => {
     .then(linkList => fetchArticleContent(linkList))
     .then(articleList => publishArticle(articleList))
     .catch(err => {
+      console.log("发布文章出错");
       console.log(err);
     });
 };
