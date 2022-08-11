@@ -1,9 +1,9 @@
 // 文章评论
-const {getCookie} = require("../cookie");
+const { getCookie } = require("../cookie");
 const JuejinHttp = require("../api");
-const {getArticleList} = require("../common");
-const {getRandomInt} = require("../utils");
-const articleComment = async (task) => {
+const { getArticleList } = require("../common");
+const { getRandomInt } = require("../utils");
+const articleComment = async task => {
   const cookie = await getCookie();
   const API = new JuejinHttp(cookie);
   const articles = await getArticleList();
@@ -26,10 +26,11 @@ const articleComment = async (task) => {
     "怎么做才能像你一样优秀？真让人头疼"
   ];
   for (let i = 0; i < times; i++) {
-    const article = articles[i] || false;
+    const aIndex = getRandomInt(0, articles.length - 1);
+    const article = articles[aIndex] || false;
     if (!article) break;
-    const {article_id, title} = article["article_info"];
-    const index = getRandomInt(0, defaultComments.length);
+    const { article_id, title } = article["article_info"];
+    const index = getRandomInt(0, defaultComments.length - 1);
     const words = defaultComments[index] || defaultComments[0];
     const comment = await API.articleCommentAdd(article_id, words);
     // 删除评论
