@@ -8,6 +8,18 @@
 
 **每日成长任务只执行env中第一个COOKIE值代表的账号**
 
+### 💡 环境变量
+
+基础环境变量参考[iDerekLi/juejin-helper](https://github.com/iDerekLi/juejin-helper)
+
+成长任务相关环境变量
+
+| 变量名       | 默认值 | 用途                                    | 可选值                                                       |
+| ------------ | ------ | --------------------------------------- | ------------------------------------------------------------ |
+| `WORDS_API`    | `?c=e` | `发布沸点`/`沸点评论`时使用的查询字符串 | [请求参数](https://developer.hitokoto.cn/sentence/#%E8%AF%B7%E6%B1%82%E5%8F%82%E6%95%B0) |
+| `APPEND_EMOJI` | `true` | `发布沸点`/`沸点评论`时是否跟随表情     | `true`/`false`                                               |
+| `ONLY_EMOJI`   | `false` | `沸点评论`是否只评论一个表情            | `true`/`false`                                               |
+
 ## 🔰 使用步骤
 
 ### 🎯 项目部署
@@ -46,4 +58,4 @@
 
 ## 开发相关
 
-Branch `main` <-- Branch `tx-SCF`
+Branch `main` <-- Branch `dev`
