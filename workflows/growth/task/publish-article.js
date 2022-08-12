@@ -19,12 +19,12 @@ const publishArticle = async () => {
     const listDOM = DOM.querySelectorAll(".list-group-item");
     const linkList = [];
     for (const article of listDOM) {
-      const item = article?.querySelector("h5 a");
+      const item = article?.querySelector("a");
       const title = item?.innerHTML;
-      const url = item?.getAttribute("href");
+      const link = item?.getAttribute("href");
       linkList.push({
         title,
-        url
+        link
       });
     }
     return linkList;
@@ -42,9 +42,14 @@ const publishArticle = async () => {
   };
 
   const parseToContent = DOM => {
-    // const content = DOM.querySelector("article").innerHTML;
-    const content = DOM.querySelector("article").textContent;
-    const brief_content = content.substr(0, 50) + "...";
+    const articleDOM = DOM.querySelector("article");
+
+    const imgs = articleDOM.querySelectorAll("img");
+    imgs.forEach(item => item.remove()); // 移除所有图片
+
+    const content = articleDOM.innerHTML;
+    const brief_content = articleDOM.textContent.substr(0, 50) + "...";
+
     return {
       content,
       brief_content
@@ -54,12 +59,12 @@ const publishArticle = async () => {
   const fetchArticleContent = async linkList => {
     const slicedList = linkList.slice(0, 2);
     const articleList = [];
-    for (const { title, url } of slicedList) {
-      const DOM = await fetchArticleDOM(url);
+    for (const { title, link } of slicedList) {
+      const DOM = await fetchArticleDOM(link);
       const { content, brief_content } = parseToContent(DOM);
       articleList.push({
         title,
-        content,
+        content: content + `<blockquote>\n\n本文来源：<a href="${baseURL + link}">${title}</a>\n</blockquote>`,
         brief_content
       });
     }
