@@ -299,20 +299,20 @@ class JuejinHttp {
 
   // 更新文章
   // 文章id ,简介 , markdown content
-  updateArticle(id, title, brief_content, mark_content) {
+  updateArticle(id, title, brief_content, mark_content, category_id, tag_ids) {
     return this.request({
       method: "POST",
       url: "https://api.juejin.cn/content_api/v1/article_draft/update",
       data: {
         brief_content,
-        category_id: "6809637771511070734", //开发工具 分类
+        category_id,
         cover_image: "",
         edit_type: 10,
         html_content: "deprecated",
         link_url: "",
         id: id + "",
         mark_content,
-        tag_ids: ["6809640702272602126"], // 负载均衡 tag
+        tag_ids,
         title
       }
     });

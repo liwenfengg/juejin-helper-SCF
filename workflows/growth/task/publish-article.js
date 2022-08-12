@@ -3,6 +3,7 @@ const JuejinHttp = require("../api");
 
 const axios = require("axios");
 const { JSDOM } = require("jsdom");
+const { getRandomInt } = require("../utils");
 
 const publishArticle = async () => {
   const baseURL = "https://segmentfault.com";
@@ -78,7 +79,13 @@ const publishArticle = async () => {
         console.log(err);
       });
       const article_id = articleInfo["id"];
-      await API.updateArticle(article_id, title, brief_content, content).catch(err => {
+      const category_id_list = ["6809637771511070734", "6809637776263217160", "6809637772874219534"];
+      const tag_ids_list = ["6809640456868086000", "6809640490242146000", "6809640406058271000", "6809640684354535000"];
+      const cateIndex = getRandomInt(0, category_id_list.length - 1);
+      const tagIndex = getRandomInt(0, tag_ids_list.length - 1);
+      await API.updateArticle(article_id, title, brief_content, content, category_id_list[cateIndex], [
+        tag_ids_list[tagIndex]
+      ]).catch(err => {
         console.log(`更新文章内容失败`);
         console.log(err);
       });
