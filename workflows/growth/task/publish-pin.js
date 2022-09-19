@@ -1,10 +1,8 @@
-const { getCookie } = require("../cookie");
+// 发布沸点
 const JuejinHttp = require("../api");
 const { getHitokotoWords, getRandomEmoji } = require("../utils");
 const env = require("../utils/env");
-// 发布沸点
-const pinPublish = async task => {
-  const cookie = await getCookie();
+const pinPublish = async (task, cookie) => {
   const API = new JuejinHttp(cookie);
   const times = task.limit - task.done; //需要执行的次数
   console.log(`需要发布${times}篇沸点`);

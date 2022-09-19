@@ -1,10 +1,8 @@
 // 沸点评论
-const { getCookie } = require("../cookie");
 const JuejinHttp = require("../api");
 const { getRandomEmoji, getHitokotoWords, getRandomInt } = require("../utils");
 const env = require("../utils/env");
-const pinComment = async task => {
-  const cookie = await getCookie();
+const pinComment = async (task, cookie) => {
   const API = new JuejinHttp(cookie);
   const pins = await API.getRecommendPins();
   if (pins.length == 0) {

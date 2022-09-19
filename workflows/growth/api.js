@@ -113,7 +113,7 @@ class JuejinHttp {
   }
 
   // 获取推荐文章列表
-  getRecommendArticles(sort_type = 300) {
+  getRecommendArticles() {
     return this.request({
       method: "POST",
       url: "https://api.juejin.cn/recommend_api/v1/article/recommend_all_feed",
@@ -122,7 +122,7 @@ class JuejinHttp {
         cursor: "0",
         id_type: 2,
         limit: 20,
-        sort_type // 300 最新排序
+        sort_type: 300 // 300 最新排序
       }
     });
   }

@@ -1,13 +1,11 @@
-const { getCookie } = require("../cookie");
+// 发布文章
 const JuejinHttp = require("../api");
-
 const axios = require("axios");
 const { JSDOM } = require("jsdom");
 const { getRandomInt } = require("../utils");
 
-const publishArticle = async () => {
+const publishArticle = async (task, cookie) => {
   const baseURL = "https://segmentfault.com";
-  const cookie = await getCookie();
   const API = new JuejinHttp(cookie);
 
   const parseToDOM = string => {

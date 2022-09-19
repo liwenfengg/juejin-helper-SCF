@@ -1,7 +1,5 @@
 const JuejinHelper = require("juejin-helper");
 const utils = require("./utils/utils");
-const pushMessage = require("./utils/pushMessage");
-const env = require("./utils/env");
 
 class CheckIn {
   username = "";
@@ -181,7 +179,7 @@ class CheckIn {
       .join("\n");
 
     return `
-掘友: ${this.username}
+${this.username}
 ${this.todayStatus === 1 ? `签到成功 +${this.incrPoint} 矿石` : this.todayStatus === 2 ? "今日已完成签到" : "签到失败"}
 ${this.dipStatus === 1 ? `沾喜气 +${this.dipValue} 幸运值` : this.dipStatus === 2 ? "今日已经沾过喜气" : "沾喜气失败"}
 ${
@@ -204,26 +202,19 @@ ${this.lotteryCount > 0 ? "==============\n" + drawLotteryHistory + "\n=========
   }
 }
 
-async function run(args) {
-  const cookies = utils.getUsersCookie(env);
-  let messageList = [];
-  for (let cookie of cookies) {
+async function run(cookie) {
+  let message = "掘金签到——";
+  try {
     const checkin = new CheckIn(cookie);
-
     await utils.wait(utils.randomRangeNumber(1000, 5000)); // 初始等待1-5s
     await checkin.run(); // 执行
-
     const content = checkin.toString();
     console.log(content); // 打印结果
-
-    messageList.push(content);
+    message += content;
+  } catch (error) {
+    message += "执行错误" + error;
   }
-
-  const message = messageList.join(`\n${"-".repeat(15)}\n`);
-  return await pushMessage({
-    subject: "掘金每日签到",
-    text: message
-  });
+  return message;
 }
 
 module.exports = run;
