@@ -17,7 +17,7 @@ async function main({ subject, text, html }) {
     topic: "",
     template: "html",
     channel: "wechat",
-    webhook: "",
+    webhook: "pushplus",
     callbackUrl: "",
     timestamp: ""
   })

@@ -2,7 +2,7 @@ const axios = require("axios");
 const env = require("../utils/env");
 const emojis = require("./emoji");
 const defaultWords = "呃呃";
-const hitokotoURL = "https://v1.hitokoto.cn/" + env.WORDS_API;
+const hitokotoURL = "https://v1.hitokoto.cn/?c=" + env.WORDS_API;
 
 const deepMerge = (ops1, ops2) => {
   let ops = Object.assign({}, ops1, ops2);
