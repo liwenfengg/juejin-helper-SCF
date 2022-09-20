@@ -3,6 +3,7 @@ const JuejinHttp = require("../api");
 
 const axios = require("axios");
 const { JSDOM } = require("jsdom");
+const { getRandomInt } = require("../utils");
 
 const publishArticle = async () => {
   const baseURL = "https://segmentfault.com";
@@ -19,12 +20,12 @@ const publishArticle = async () => {
     const listDOM = DOM.querySelectorAll(".list-group-item");
     const linkList = [];
     for (const article of listDOM) {
-      const item = article?.querySelector("h5 a");
+      const item = article?.querySelector("a");
       const title = item?.innerHTML;
-      const url = item?.getAttribute("href");
+      const link = item?.getAttribute("href");
       linkList.push({
         title,
-        url
+        link
       });
     }
     return linkList;
@@ -42,9 +43,14 @@ const publishArticle = async () => {
   };
 
   const parseToContent = DOM => {
-    // const content = DOM.querySelector("article").innerHTML;
-    const content = DOM.querySelector("article").textContent;
-    const brief_content = content.substr(0, 50) + "...";
+    const articleDOM = DOM.querySelector("article");
+
+    const imgs = articleDOM.querySelectorAll("img");
+    imgs.forEach(item => item.remove()); // 移除所有图片
+
+    const content = articleDOM.innerHTML;
+    const brief_content = articleDOM.textContent.substr(0, 50) + "...";
+
     return {
       content,
       brief_content
@@ -54,12 +60,12 @@ const publishArticle = async () => {
   const fetchArticleContent = async linkList => {
     const slicedList = linkList.slice(0, 2);
     const articleList = [];
-    for (const { title, url } of slicedList) {
-      const DOM = await fetchArticleDOM(url);
+    for (const { title, link } of slicedList) {
+      const DOM = await fetchArticleDOM(link);
       const { content, brief_content } = parseToContent(DOM);
       articleList.push({
         title,
-        content,
+        content: content + `<blockquote>\n\n本文来源：<a href="${baseURL + link}">${title}</a>\n</blockquote>`,
         brief_content
       });
     }
@@ -73,7 +79,13 @@ const publishArticle = async () => {
         console.log(err);
       });
       const article_id = articleInfo["id"];
-      await API.updateArticle(article_id, title, brief_content, content).catch(err => {
+      const category_id_list = ["6809637771511070734", "6809637776263217160", "6809637772874219534"];
+      const tag_ids_list = ["6809640456868086000", "6809640490242146000", "6809640406058271000", "6809640684354535000"];
+      const cateIndex = getRandomInt(0, category_id_list.length - 1);
+      const tagIndex = getRandomInt(0, tag_ids_list.length - 1);
+      await API.updateArticle(article_id, title, brief_content, content, category_id_list[cateIndex], [
+        tag_ids_list[tagIndex]
+      ]).catch(err => {
         console.log(`更新文章内容失败`);
         console.log(err);
       });

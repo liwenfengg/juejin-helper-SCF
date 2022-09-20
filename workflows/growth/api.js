@@ -1,5 +1,5 @@
 const axios = require("axios");
-const {deepMerge} = require("./utils");
+const { deepMerge } = require("./utils");
 const defaultOptions = {
   method: "GET",
   data: {},
@@ -31,11 +31,11 @@ class JuejinHttp {
       });
       const opts = deepMerge(defaultOptions, options);
       axios(opts)
-        .then((res) => {
+        .then(res => {
           let data = res.data || {};
           resolve(data.data);
         })
-        .catch((err) => {
+        .catch(err => {
           reject(err);
         });
     });
@@ -92,7 +92,7 @@ class JuejinHttp {
     return this.request({
       method: "POST",
       url: "https://api.juejin.cn/growth_api/v1/lottery_history/global_big",
-      data: {page_no: 1, page_size: 5}
+      data: { page_no: 1, page_size: 5 }
     });
   }
   // 沾喜气  id
@@ -100,7 +100,7 @@ class JuejinHttp {
     return this.request({
       method: "POST",
       url: "https://api.juejin.cn/growth_api/v1/lottery_lucky/dip_lucky",
-      data: {lottery_history_id: id}
+      data: { lottery_history_id: id }
     });
   }
 
@@ -108,7 +108,7 @@ class JuejinHttp {
     return this.request({
       method: "POST",
       url: "https://api.juejin.cn/growth_api/v1/user_growth/task_list",
-      data: {growth_type}
+      data: { growth_type }
     });
   }
 
@@ -190,7 +190,7 @@ class JuejinHttp {
   getRecommendAuthors() {
     return this.request({
       method: "GET",
-      url: "https://api.juejin.cn/user_api/v1/author/recommend"
+      url: "https://api.juejin.cn/user_api/v1/author/recommend?limit=99"
     });
   }
 
@@ -299,20 +299,20 @@ class JuejinHttp {
 
   // 更新文章
   // 文章id ,简介 , markdown content
-  updateArticle(id, title, brief_content, mark_content) {
+  updateArticle(id, title, brief_content, mark_content, category_id, tag_ids) {
     return this.request({
       method: "POST",
       url: "https://api.juejin.cn/content_api/v1/article_draft/update",
       data: {
         brief_content,
-        category_id: "6809637771511070734", //开发工具 分类
+        category_id,
         cover_image: "",
         edit_type: 10,
         html_content: "deprecated",
         link_url: "",
         id: id + "",
         mark_content,
-        tag_ids: ["6809640702272602126"], // 负载均衡 tag
+        tag_ids,
         title
       }
     });

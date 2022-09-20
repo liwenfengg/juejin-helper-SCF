@@ -47,11 +47,15 @@ class CheckIn {
 
     const todayStatus = await growth.getTodayStatus();
     if (!todayStatus) {
-      const checkInResult = await growth.checkIn();
+      try {
+        const checkInResult = await growth.checkIn();
 
-      this.incrPoint = checkInResult.incr_point;
-      this.sumPoint = checkInResult.sum_point;
-      this.todayStatus = 1; // 本次签到
+        this.incrPoint = checkInResult.incr_point;
+        this.sumPoint = checkInResult.sum_point;
+        this.todayStatus = 1; // 本次签到
+      } catch (error) {
+        /* 抛出`签到错误`的报错 */
+      }
     } else {
       this.todayStatus = 2; // 已签到
     }
