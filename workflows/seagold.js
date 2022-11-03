@@ -415,7 +415,7 @@ async function run(args) {
 
   const message = messageList.join(`\n${"-".repeat(15)}\n`);
   return await pushMessage({
-    subject: "掘金每日签到",
+    subject: "海底掘金",
     text: message
   });
 }
