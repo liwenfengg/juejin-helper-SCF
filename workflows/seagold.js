@@ -1,7 +1,6 @@
 const JuejinHelper = require("juejin-helper");
 const utils = require("./utils/utils");
 const { Grid, Astar } = require("fast-astar");
-const pushMessage = require("./utils/pushMessage");
 const env = require("./utils/env");
 
 class Seagold {
@@ -390,7 +389,6 @@ class Seagold {
       .join("\n");
 
     return `
-掘友: ${userInfo.name}
 今日限制矿石数 ${userInfo.todayLimitDiamond}
 ${userInfo.todayDiamond < userInfo.todayLimitDiamond ? `今日获取矿石数 ${userInfo.todayDiamond}` : "今日获取已达上限"}
 ${this.history.length ? `\n游戏记录\n${gameLives}` : ""}
@@ -398,26 +396,19 @@ ${this.history.length ? `\n游戏记录\n${gameLives}` : ""}
   }
 }
 
-async function run(args) {
-  const cookies = utils.getUsersCookie(env);
-  const messageList = [];
-  for (let cookie of cookies) {
+async function run(cookie) {
+  let message = "掘金游戏\n";
+  try {
     const seaGold = new Seagold(cookie);
-
     await utils.wait(utils.randomRangeNumber(1000, 5000)); // 初始等待1-5s
     await seaGold.run();
-
     const content = seaGold.toString();
     console.log(content);
-
-    messageList.push(content);
+    message += content;
+  } catch (error) {
+    message += "执行错误" + error;
   }
-
-  const message = messageList.join(`\n${"-".repeat(15)}\n`);
-  return await pushMessage({
-    subject: "海底掘金",
-    text: message
-  });
+  return message;
 }
 
 module.exports = run;

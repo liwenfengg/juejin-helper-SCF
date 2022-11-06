@@ -1,13 +1,11 @@
 // 文章评论
-const { getCookie } = require("../cookie");
 const JuejinHttp = require("../api");
 const { getArticleList } = require("../common");
 const { getRandomInt, getRandomEmoji } = require("../utils");
 const env = require("../utils/env");
-const articleComment = async task => {
-  const cookie = await getCookie();
+const articleComment = async (task, cookie) => {
   const API = new JuejinHttp(cookie);
-  const articles = await getArticleList();
+  const articles = await getArticleList(cookie);
   if (articles.length == 0) {
     console.log(`获取文章列表失败[d1]`);
     return;

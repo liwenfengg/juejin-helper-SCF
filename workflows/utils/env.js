@@ -28,5 +28,6 @@ module.exports = {
    * PushPlus配置
    * http://www.pushplus.plus/doc/guide/openApi.html
    */
-  PUSHPLUS_TOKEN: env.PUSHPLUS_TOKEN
+  PUSHPLUS_TOKEN: env.PUSHPLUS_TOKEN,
+  MERGE:env.MERGE
 };
