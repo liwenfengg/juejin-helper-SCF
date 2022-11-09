@@ -8,7 +8,6 @@ const {
   followAuthor,
   publishArticle,
   publishPin,
-  publishThemePin,
   readArticle
 } = require("./task/index");
 
@@ -41,13 +40,6 @@ const handleTask = async (task, cookie) => {
   if (id == 5 && env.PUBLISHARTICLE) {
     await publishArticle(task, cookie);
   }
-
-  try {
-  await publishThemePin({limit:1,done:0},cookie)
-  } catch (error) {
-    console.log('error',error)
-  }
-
 };
 
 module.exports = {
