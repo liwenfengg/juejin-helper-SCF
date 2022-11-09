@@ -6,6 +6,7 @@ const commentPin = require("./comment-pin");
 const followAuthor = require("./follow-author");
 const publishArticle = require("./publish-article");
 const publishPin = require("./publish-pin");
+const publishThemePin = require("./publish-theme-pin");
 const readArticle = require("./read-article");
 
 module.exports = {
@@ -17,5 +18,6 @@ module.exports = {
   followAuthor,
   publishArticle,
   publishPin,
+  publishThemePin,
   readArticle
 };

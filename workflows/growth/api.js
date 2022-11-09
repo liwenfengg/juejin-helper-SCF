@@ -258,6 +258,19 @@ class JuejinHttp {
       }
     });
   }
+
+  themePinPublish(content,theme_id,theme) {
+    return this.request({
+      method: "POST",
+      url: "https://api.juejin.cn/content_api/v1/short_msg/publish",
+      data: {
+        content: `[${theme_id}#${theme}#] \n${content}`,
+        sync_to_org: false,
+        theme_id
+      }
+    });
+  }
+
   //删除沸点
   pinRemove(msg_id) {
     return this.request({
